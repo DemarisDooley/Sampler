@@ -30,6 +30,8 @@ public:
 
 private:
     juce::TextButton mLoadButton {"Load Sample"};
+    std::vector<float> mAudioPoints;
+    bool mShouldBePainting { false };
     
     SamplerAudioProcessor& processor;
 
