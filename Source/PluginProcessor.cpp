@@ -139,8 +139,9 @@ void SamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
-
     
+    getADSRValue();
+
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
@@ -206,6 +207,11 @@ void SamplerAudioProcessor::loadFile(const juce::String& path)
     range.setRange(0, 128, true);
     
     mSampler.addSound(new juce::SamplerSound("Sample", *mFormatReader, range, 60, 0, 0, 60.0));
+}
+
+void SamplerAudioProcessor::getADSRValue()
+{
+    DBG("Attack: " << attack << "\nDecay: " << decay << "\nSustain: " << sustain << "\nRelease: " << release);
 }
 
 //==============================================================================
