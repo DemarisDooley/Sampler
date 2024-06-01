@@ -21,7 +21,6 @@ SamplerAudioProcessorEditor::SamplerAudioProcessorEditor (SamplerAudioProcessor&
     mAttackSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 40, 20);
     mAttackSlider.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colours::white);
     mAttackSlider.setRange(0.0f, 5.0f, 0.01f);
-    mAttackSlider.addListener(this);
     addAndMakeVisible(mAttackSlider);
     
     mAttackLabel.setFont(10.0f);
@@ -30,12 +29,13 @@ SamplerAudioProcessorEditor::SamplerAudioProcessorEditor (SamplerAudioProcessor&
     mAttackLabel.setJustificationType(juce::Justification::centredTop);
     mAttackLabel.attachToComponent(&mAttackSlider, false);
     
+    mAttackAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(processor.getAPVTS(), "ATTACK", mAttackSlider);
+    
     // Decay Slider
     mDecaySlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     mDecaySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 40, 20);
     mDecaySlider.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colours::white);
     mDecaySlider.setRange(0.0f, 5.0f, 0.01f);
-    mDecaySlider.addListener(this);
     addAndMakeVisible(mDecaySlider);
     
     mDecayLabel.setFont(10.0f);
@@ -44,12 +44,13 @@ SamplerAudioProcessorEditor::SamplerAudioProcessorEditor (SamplerAudioProcessor&
     mDecayLabel.setJustificationType(juce::Justification::centredTop);
     mDecayLabel.attachToComponent(&mDecaySlider, false);
     
+    mDecayAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(processor.getAPVTS(), "DECAY", mDecaySlider);
+    
     // Sustain Slider
     mSustainSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     mSustainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 40, 20);
     mSustainSlider.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colours::white);
     mSustainSlider.setRange(0.0f, 1.0f, 0.01f);
-    mSustainSlider.addListener(this);
     addAndMakeVisible(mSustainSlider);
     
     mSustainLabel.setFont(10.0f);
@@ -58,12 +59,13 @@ SamplerAudioProcessorEditor::SamplerAudioProcessorEditor (SamplerAudioProcessor&
     mSustainLabel.setJustificationType(juce::Justification::centredTop);
     mSustainLabel.attachToComponent(&mSustainSlider, false);
     
+    mSustainAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(processor.getAPVTS(), "SUSTAIN", mSustainSlider);
+    
     // Release Slider
     mReleaseSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     mReleaseSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 40, 20);
     mReleaseSlider.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colours::white);
     mReleaseSlider.setRange(0.0f, 5.0f, 0.01f);
-    mReleaseSlider.addListener(this);
     addAndMakeVisible(mReleaseSlider);
     
     mReleaseLabel.setFont(10.0f);
@@ -71,6 +73,8 @@ SamplerAudioProcessorEditor::SamplerAudioProcessorEditor (SamplerAudioProcessor&
     mReleaseLabel.setColour(juce::Label::ColourIds::textColourId, juce::Colours::white);
     mReleaseLabel.setJustificationType(juce::Justification::centredTop);
     mReleaseLabel.attachToComponent(&mReleaseSlider, false);
+    
+    mReleaseAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(processor.getAPVTS(), "RELEASE", mReleaseSlider);
     
     setSize (600, 200);
 }
@@ -175,24 +179,4 @@ void SamplerAudioProcessorEditor::filesDropped(const juce::StringArray& files, i
     repaint();
 }
 
-void SamplerAudioProcessorEditor::sliderValueChanged(juce::Slider *slider)
-{
-    if (slider == &mAttackSlider) 
-    {
-        processor.getADSRParams().attack = mAttackSlider.getValue();
-    }
-    else if (slider == &mDecaySlider)
-    {
-        processor.getADSRParams().decay = mDecaySlider.getValue();
-    }
-    else if (slider == &mSustainSlider)
-    {
-        processor.getADSRParams().sustain = mSustainSlider.getValue();
-    }
-    else if (slider == &mReleaseSlider)
-    {
-        processor.getADSRParams().release = mReleaseSlider.getValue();
-    }
-    
-    processor.updateADSR();
-}
+
