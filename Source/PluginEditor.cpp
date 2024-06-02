@@ -13,8 +13,16 @@
 SamplerAudioProcessorEditor::SamplerAudioProcessorEditor (SamplerAudioProcessor& p)
     : AudioProcessorEditor (&p), mWaveThumbnail(p), mADSR(p), processor (p)
 {
+    auto image = juce::ImageCache::getFromMemory(BinaryData::Plugin_Logo_png, BinaryData::Plugin_Logo_pngSize);
+    
+    if (!image.isNull())
+        mImageComponent.setImage(image, juce::RectanglePlacement::onlyReduceInSize);
+    else
+        jassert(!image.isNull());
+    
     addAndMakeVisible(mWaveThumbnail);
     addAndMakeVisible(mADSR);
+    addAndMakeVisible(mImageComponent);
     
     startTimerHz(30);
     
@@ -36,6 +44,7 @@ void SamplerAudioProcessorEditor::resized()
 {
     mWaveThumbnail.setBoundsRelative(0.0, 0.25, 1.0, 0.5);
     mADSR.setBoundsRelative(0.0f, 0.75f, 1.0f, 0.25f);
+    mImageComponent.setBoundsRelative(0.0f, 0.0f, 0.35f, 0.25f);
 }
 
 void SamplerAudioProcessorEditor::timerCallback()

@@ -20,6 +20,10 @@
             file="Source/ADSRComponent.cpp"/>
       <FILE id="c3toyg" name="ADSRComponent.h" compile="0" resource="0" file="Source/ADSRComponent.h"/>
     </GROUP>
+    <GROUP id="{3D89869E-C9CA-0076-B4B9-477D7BF8E35B}" name="Resources">
+      <FILE id="sM506x" name="Plug-in Logo.png" compile="0" resource="1"
+            file="Resources/Plug-in Logo.png"/>
+    </GROUP>
   </MAINGROUP>
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
