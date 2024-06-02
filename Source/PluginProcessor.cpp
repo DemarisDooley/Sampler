@@ -149,7 +149,21 @@ void SamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
     {
         updateADSR();
     }
+    
+    juce::MidiMessage m;
+    juce::MidiBuffer::Iterator it { midiMessages};
+    int sample;
+    
+    while (it.getNextEvent(m, sample))
+    {
+        if (m.isNoteOn())
+            mIsNotePlayed = true;
+        else if (m.isNoteOff())
+            mIsNotePlayed = false;
+    }
 
+    mSampleCount = mIsNotePlayed ? mSampleCount += buffer.getNumSamples() : 0;
+    
     mSampler.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 }
 

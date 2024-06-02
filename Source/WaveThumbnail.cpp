@@ -38,10 +38,10 @@ void WaveThumbnail::paint (juce::Graphics& g)
         
         // find ratio: sample = 44100 (1 sec)... x axis of window  = 600 == sampleLength / getWidth()
         auto ratio = waveform.getNumSamples() / getWidth();
-        
         // values of audiofile -1 and 1... y axis of window is 200... -1 to 1 in audio to mean 200 to 0
         // use the ratio to take values from the audio buffer and put in vector to display
         auto buffer = waveform.getReadPointer(0);
+        
         // scale audio file to window on x axis
         for (int sample = 0; sample < waveform.getNumSamples(); sample+=ratio)
         {
@@ -65,6 +65,14 @@ void WaveThumbnail::paint (juce::Graphics& g)
         g.setFont(15.0f);
         auto textBounds = getLocalBounds().reduced(10, 10);
         g.drawFittedText(mFileName, textBounds, juce::Justification::topRight, 1);
+        
+        auto playHeadPosition = juce::jmap<int> (processor.getSampleCount(), 0, processor.getWaveForm().getNumSamples(), 0, getWidth());
+        
+        g.setColour(juce::Colours::white);
+        g.drawLine(playHeadPosition, 0, playHeadPosition, getHeight(), 2.0f);
+        
+        g.setColour(juce::Colours::black.withAlpha(0.2f));
+        g.fillRect(0, 0, playHeadPosition, getHeight());
     }
     else
     {

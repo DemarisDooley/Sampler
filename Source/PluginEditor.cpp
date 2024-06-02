@@ -15,11 +15,15 @@ SamplerAudioProcessorEditor::SamplerAudioProcessorEditor (SamplerAudioProcessor&
 {
     addAndMakeVisible(mWaveThumbnail);
     addAndMakeVisible(mADSR);
+    
+    startTimerHz(30);
+    
     setSize (600, 400);
 }
 
 SamplerAudioProcessorEditor::~SamplerAudioProcessorEditor()
 {
+    stopTimer();
 }
 
 //==============================================================================
@@ -34,5 +38,9 @@ void SamplerAudioProcessorEditor::resized()
     mADSR.setBoundsRelative(0.0f, 0.75f, 1.0f, 0.25f);
 }
 
+void SamplerAudioProcessorEditor::timerCallback()
+{
+    repaint();
+}
 
 

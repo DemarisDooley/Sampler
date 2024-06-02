@@ -16,7 +16,8 @@
 //==============================================================================
 /**
 */
-class SamplerAudioProcessorEditor : public juce::AudioProcessorEditor
+class SamplerAudioProcessorEditor : public juce::AudioProcessorEditor,
+                                public juce::Timer
 {
 public:
     SamplerAudioProcessorEditor (SamplerAudioProcessor&);
@@ -25,6 +26,8 @@ public:
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
+    
+    void timerCallback() override;
     
 private:    
     WaveThumbnail mWaveThumbnail;
